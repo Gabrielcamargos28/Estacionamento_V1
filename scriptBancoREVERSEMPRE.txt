@@ -1,0 +1,236 @@
+CREATE TABLE pessoa (
+    id_pessoa BIGINT(20) PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    nome VARCHAR(100) NOT NULL,
+    cpf VARCHAR(15) UNIQUE,
+    cnpj VARCHAR(15) UNIQUE,
+    usuario VARCHAR(30) NOT NULL UNIQUE,
+    senha VARCHAR(20) NOT NULL,
+    telefone VARCHAR(20) UNIQUE NOT NULL,
+    logradouro VARCHAR(50) NOT NULL,
+    cidade VARCHAR(50) NOT NULL,
+    bairro VARCHAR(50),
+    numero int NOT NULL,
+    cep VARCHAR(15) NOT NULL,
+    uf VARCHAR(5) NOT NULL,
+    complemento VARCHAR(50),
+    data_de_nascimento DATETIME NOT NULL,
+    genero VARCHAR(30),
+    cnh VARCHAR(20) UNIQUE
+);
+CREATE TABLE cliente (
+    fk_id_cliente BIGINT NOT NULL,
+    cartao_cadastrado VARCHAR(50),
+    FOREIGN KEY (fk_id_cliente)
+        REFERENCES pessoa (id_pessoa)
+);
+CREATE TABLE departamento(
+	id_departamento BIGINT(50) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(20) NOT NULL
+);
+CREATE TABLE funcionario (
+    cargo VARCHAR(30) NOT NULL,
+    salario DOUBLE NOT NULL,
+    fk_id_departamento BIGINT(50) NOT NULL,
+    FOREIGN KEY (fk_id_departamento)
+    	REFERENCES departamento (id_departamento),
+    fk_id_funcionario BIGINT(20) NOT NULL,
+    FOREIGN KEY (fk_id_funcionario)
+        REFERENCES pessoa (id_pessoa)
+);
+
+CREATE TABLE veiculo (
+    id_veiculo BIGINT(20) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    placa VARCHAR(8) NOT NULL,
+    modelo VARCHAR(30) NOT NULL,
+    cor VARCHAR(20) NOT NULL,
+    marca VARCHAR(30) NOT NULL,
+    tipo ENUM('moto', 'carro', 'van','bicicleta', 'onibus', 'caminhao'),
+    fk_id_dono INT NOT NULL,
+    FOREIGN KEY (fk_id_dono)
+        REFERENCES cliente (fk_id_cliente)
+);
+
+
+CREATE TABLE vaga (
+    id_vaga BIGINT(20) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    numero_vaga INT NOT NULL UNIQUE,
+    situacao ENUM('disponivel', 'ocupada', 'reservada'),
+    tipo_vaga ENUM('moto', 'carro', 'van','bicicleta', 'onibus', 'caminhao'),
+    fk_id_veiculo INT,
+    FOREIGN KEY (fk_id_veiculo)
+        REFERENCES veiculo (id_veiculo)
+);
+CREATE TABLE precos_servicos (
+   	id_servico BIGINT AUTO_INCREMENT NOT NULL,
+    nome_servico VARCHAR(50) NOT NULL,
+    preco_servico DOUBLE NOT NULL
+);
+
+CREATE TABLE estacionamento (
+    id_estacionamento BIGINT(20) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    fk_id_vaga BIGINT(20) NOT NULL,
+    FOREIGN KEY (fk_id_vaga)
+        REFERENCES vaga (id_vaga),
+    fk_id_veiculo BIGINT(20) NOT NULL,
+    FOREIGN KEY (id_veiculo)
+        REFERENCES veiculo (id_veiculo),
+    id_atendente BIGINT(20) NOT NULL,
+    FOREIGN KEY (id_atendente)
+        REFERENCES funcionario (id_pessoa),
+    id_dono BIGINT(20) NOT NULL,
+    FOREIGN KEY (id_dono)
+        REFERENCES cliente (id_pessoa),
+    preco DOUBLE NOT NULL,
+    forma_pagamento ENUM('dinheiro', 'pix', 'cartao', 'cheque', 'boleto')
+);
+
+
+---------------------------------------------------------------------------------
+CREATE TABLE departamento(
+	id_departamento BIGINT(50) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(20) NOT NULL
+);
+CREATE TABLE funcionario (
+    cargo VARCHAR(30) NOT NULL,
+    salario DOUBLE NOT NULL,
+    fk_id_departamento BIGINT(50) NOT NULL,
+    FOREIGN KEY (fk_id_departamento)
+    	REFERENCES departamento (id_departamento),
+    fk_id_funcionario BIGINT(20) NOT NULL,
+    FOREIGN KEY (fk_id_funcionario)
+        REFERENCES pessoa (id_pessoa)
+);
+
+CREATE TABLE veiculo (
+    id_veiculo BIGINT(20) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    placa VARCHAR(8) NOT NULL,
+    modelo VARCHAR(30) NOT NULL,
+    cor VARCHAR(20) NOT NULL,
+    marca VARCHAR(30) NOT NULL,
+    tipo ENUM('moto', 'carro', 'van','bicicleta', 'onibus', 'caminhao'),
+    fk_id_dono BIGINT(20) NOT NULL,
+    FOREIGN KEY (fk_id_dono)
+        REFERENCES cliente (fk_id_cliente)
+);
+
+
+CREATE TABLE vaga (
+    id_vaga BIGINT(20) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    numero_vaga INT NOT NULL UNIQUE,
+    situacao ENUM('disponivel', 'ocupada', 'reservada'),
+    tipo_vaga ENUM('moto', 'carro', 'van','bicicleta', 'onibus', 'caminhao'),
+    fk_id_veiculo BIGINT(20),
+    FOREIGN KEY (fk_id_veiculo)
+        REFERENCES veiculo (id_veiculo)
+);
+CREATE TABLE precos_servicos (
+   	id_servico BIGINT AUTO_INCREMENT NOT NULL,
+    nome_servico VARCHAR(50) NOT NULL,
+    preco_servico DOUBLE NOT NULL
+);
+
+CREATE TABLE estacionamento (
+    id_estacionamento BIGINT(20) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    fk_id_vaga BIGINT(20) NOT NULL,
+    FOREIGN KEY (fk_id_vaga)
+        REFERENCES vaga (id_vaga),
+    fk_id_veiculo BIGINT(20) NOT NULL,
+    FOREIGN KEY (fk_id_veiculo)
+        REFERENCES veiculo (id_veiculo),
+    fk_id_atendente BIGINT(20),
+    FOREIGN KEY (fk_id_atendente)
+        REFERENCES funcionario (fk_id_funcionario),
+    fk_id_dono BIGINT(20) NOT NULL,
+    FOREIGN KEY (fk_id_dono)
+        REFERENCES cliente (fk_id_cliente),
+    preco DOUBLE NOT NULL,
+    forma_pagamento ENUM('dinheiro', 'pix', 'cartao', 'cheque', 'boleto')
+);
+---------------------------------------------------------------------------------
+drop DATABASE estacionamentov1;
+create DATABASE estacionamentov1;
+CREATE TABLE pessoa (
+    id_pessoa BIGINT(20) PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    nome VARCHAR(100) NOT NULL,
+    cpf VARCHAR(15) UNIQUE,
+    cnpj VARCHAR(15) UNIQUE,
+    usuario VARCHAR(30) NOT NULL UNIQUE,
+    senha VARCHAR(20) NOT NULL,
+    telefone VARCHAR(20) UNIQUE NOT NULL,
+    logradouro VARCHAR(50) NOT NULL,
+    cidade VARCHAR(50) NOT NULL,
+    bairro VARCHAR(50),
+    numero int NOT NULL,
+    cep VARCHAR(15) NOT NULL,
+    uf VARCHAR(5) NOT NULL,
+    complemento VARCHAR(50),
+    data_de_nascimento DATETIME NOT NULL,
+    genero VARCHAR(30),
+    cnh VARCHAR(20) UNIQUE
+);
+CREATE TABLE cliente (
+    fk_id_cliente BIGINT NOT NULL,
+    cartao_cadastrado VARCHAR(50),
+    FOREIGN KEY (fk_id_cliente)
+        REFERENCES pessoa (id_pessoa)
+);
+CREATE TABLE departamento(
+	id_departamento BIGINT(50) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(20) NOT NULL
+);
+CREATE TABLE funcionario (
+    cargo VARCHAR(30) NOT NULL,
+    salario DOUBLE NOT NULL,
+    fk_id_departamento BIGINT(50) NOT NULL,
+    FOREIGN KEY (fk_id_departamento)
+    	REFERENCES departamento (id_departamento),
+    fk_id_funcionario BIGINT(20) NOT NULL,
+    FOREIGN KEY (fk_id_funcionario)
+        REFERENCES pessoa (id_pessoa)
+);
+
+CREATE TABLE veiculo (
+    id_veiculo BIGINT(20) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    placa VARCHAR(8) NOT NULL,
+    modelo VARCHAR(30) NOT NULL,
+    cor VARCHAR(20) NOT NULL,
+    marca VARCHAR(30) NOT NULL,
+    tipo ENUM('moto', 'carro', 'van','bicicleta', 'onibus', 'caminhao'),
+    fk_id_dono BIGINT(20) NOT NULL,
+    FOREIGN KEY (fk_id_dono)
+        REFERENCES cliente (fk_id_cliente)
+);
+
+
+CREATE TABLE vaga (
+    id_vaga BIGINT(20) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    numero_vaga INT NOT NULL UNIQUE,
+    situacao ENUM('disponivel', 'ocupada', 'reservada'),
+    tipo_vaga ENUM('moto', 'carro', 'van','bicicleta', 'onibus', 'caminhao'),
+    fk_id_veiculo BIGINT(20),
+    FOREIGN KEY (fk_id_veiculo)
+        REFERENCES veiculo (id_veiculo)
+);
+CREATE TABLE precos_servicos (
+   	id_servico BIGINT AUTO_INCREMENT NOT NULL,
+    nome_servico VARCHAR(50) NOT NULL,
+    preco_servico DOUBLE NOT NULL
+);
+
+CREATE TABLE estacionamento (
+    id_estacionamento BIGINT(20) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    fk_id_vaga BIGINT(20) NOT NULL,
+    FOREIGN KEY (fk_id_vaga)
+        REFERENCES vaga (id_vaga),
+    fk_id_veiculo BIGINT(20) NOT NULL,
+    FOREIGN KEY (fk_id_veiculo)
+        REFERENCES veiculo (id_veiculo),
+    fk_id_atendente BIGINT(20),
+    FOREIGN KEY (fk_id_atendente)
+        REFERENCES funcionario (fk_id_funcionario),
+    fk_id_dono BIGINT(20) NOT NULL,
+    FOREIGN KEY (fk_id_dono)
+        REFERENCES cliente (fk_id_cliente),
+    preco DOUBLE NOT NULL,
+    forma_pagamento ENUM('dinheiro', 'pix', 'cartao', 'cheque', 'boleto')
+);
